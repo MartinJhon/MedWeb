@@ -1,0 +1,249 @@
+{% extends "mymanage/main.html" %}
+{% load static from staticfiles %}
+{% block main_js_css %}
+{% load static from staticfiles %}
+<script src="{% static 'mymanage/js/jquery.min.js' %}"></script>
+<script src="{% static 'mymanage/js/echarts.js' %}"></script>
+
+{% endblock %}
+{% block Main_body %}
+<div class="row">
+	<div class="span9">
+		<div>
+			<h3>
+				主机监控详细情况
+			</h3>
+			<input id="mytxt1" type="text" name="txt_id1" style="width: 50%;">
+			<hr>
+		</div>
+		<div >
+			<input id="mytxt" type="hidden" name="txt_id" value="{{id}}">
+			<input id="mytxt2" type="hidden" name="txt_ip" value="{{ip}}">
+			<input id="mytxt3" type="hidden" name="txt_user" value="{{user}}">
+			<input id="mytxt4" type="hidden" name="txt_pwd" value="{{pwd}}">
+			<input id="mytxt5" type="hidden" name="txt_sel" value="{{sel}}">
+			<table id="mytalbe" border="1" width="200px;" style="line-height: 30px;">
+				<tbody>
+					<tr id="template1"><td id="cpu">CPU：{{cpu}}核</td></tr>
+					<tr id="template2"><td id="nc">内存：{{hard}}KB</td></tr>
+					<tr id="template3"><td id="hard">硬盘：{{nc}}GB</td></tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div id="map" style="border: 1px solid #333; height: 500px; margin-top: 5px;">
+			
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var dom = document.getElementById("map");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+function randomData() {
+	$.ajax({
+		url:"{% url 'mymanage_host_monitor_data' %}",
+		async:true,
+		data: {"txt_id":txt_id,"txt_ip":txt_ip,"txt_user":txt_user,"txt_pwd":txt_pwd,"txt_sel":txt_sel},//传数据，没有为空字典或者不写这个字段
+		dataType:'json',
+		type:'get',
+		success:function(res){
+			var lis=res.data;
+			now1=lis.time1;//时间
+			value1=lis.value1;//CPU平均值
+            cpu=lis.cpu;
+            hard=lis.hard;
+            nc=lis.nc;
+            info=lis.info;
+		},
+	});
+
+	$("#mytxt1").attr("value","时间点："+now1+" 使用率："+value1+"%");
+    $("tr:eq(0)").children('td').eq(0).text("CPU："+cpu+"核");
+    $("tr:eq(1)").children('td').eq(0).text("内存："+nc+"KB");
+    $("tr:eq(2)").children('td').eq(0).text("硬盘："+hard+"GB");
+	//now = new Date(+now + oneDay);
+	//value = value + Math.random() * 21 - 10;//math.random()为0和1的随机数join('/')代表数组连接
+    now = new Date();
+	if (xdata.length >= 10) {
+		xdata.shift();
+	}
+	//xdata.push(now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
+	xdata.push(now1);
+	for (var i = 0; i < arrtitle.length; i++) {
+	    if (ydata[i].data.length >= 10) {
+	        ydata[i].data.shift();
+	    }
+	    if (ydata[i].name == '服务器CPU平均值') {
+	        ydata[i].data.push(value1);
+	    }
+	}
+}
+
+var txt_id=$("#mytxt").attr("value");
+var txt_ip=$("#mytxt2").attr("value");
+var txt_user=$("#mytxt3").attr("value");
+var txt_pwd=$("#mytxt4").attr("value");
+var txt_sel=$("#mytxt5").attr("value");
+
+
+    var ydata = [
+        {
+            name: '服务器CPU平均值',
+            //line为折线类型
+            type: 'line',
+            data: [0],
+            markPoint: {
+                data: [
+                    { type: 'max', name: '最大值' },
+                    { type: 'min', name: '最小值' }
+                ]
+            },
+            markLine: {
+                data: [
+                    { type: 'average', name: '平均值' }
+                ]
+            }
+        },
+    ];
+//x轴
+    //定义数组
+var now1="";
+var value1=0;
+var now = new Date();//获取当前时间
+var xdata = new Array();
+var arrtitle = ['服务器CPU平均值'];//标题
+var cpu="";
+var hard="";
+var nc="";
+var info=1;
+    //随机数
+var value = [
+        { "name": "aaa", "value": 4 },
+        { "name": "bbb", "value": 3 }
+]
+//选项
+option = {
+    //设置背景颜色
+    backgroundColor: '#00cccc',
+    //标题
+    title: {
+        text: '服务器CPU使用情况',
+        textStyle: {
+            //设置主标题颜色
+            color: '#ff0000'
+        }
+    },
+    //提示框
+    tooltip: {
+        trigger: 'axis'//当trigger为’item’时只会显示该点的数据,为’axis’时显示该列下所有坐标轴所对应的数据
+    },
+    //图例
+    legend: {
+        data: arrtitle
+    },
+    //工具栏，内置有导出图片、数据视图、动态类型切换、数据区域缩放、重置五个工具。
+    toolbox: {
+        show: true,
+        //toolbox的配置项
+        feature: {
+            //辅助线的开关
+            mark: { show: true },
+            //数据视图
+            dataView: {
+                show: true,
+                readOnly: false
+            },
+            //动态类型切换
+            magicType: {
+                show: true,
+                //line为折线图，bar为柱状图
+                type: ['line', 'bar']
+            },
+            //配置项还原
+            restore: { show: true },
+            //将图标保存为图片
+            saveAsImage: { show: true }
+        }
+    },
+    //可计算特性
+    calculable: true,
+    //x轴样式
+    xAxis: [
+        {
+            //设置类别
+            type: 'category',
+            //数值起始和结束两端空白策略
+            boundaryGap: false,
+            axisLine: {
+                lineStyle: {
+                    type: 'solid',
+                    color: '#fff',//左边线的颜色
+                    width: '4'//坐标线的宽度
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#fff'//x轴刻度数值颜色
+                }
+            },
+            data: xdata
+        }
+    ],
+    //y轴样式
+    yAxis: [
+        {
+            //设置类别
+            type: 'value',
+            //y轴刻度
+            axisLabel: {
+                //设置y轴数值为%
+                formatter: '{value} %',
+                textStyle: {
+                    color: '#fff'//y轴刻度数值颜色
+                }
+            },
+            axisLine: {
+                lineStyle: {
+                    type: 'solid',
+                    color: '#fff',//y轴坐标轴颜色
+                    width: '4'//坐标轴宽度
+                }
+            }
+        }
+    ],
+    //数据系列，一个图表可能包含多个系列，每一个系列可能包含多个数据
+    series: ydata
+};
+//为echarts对象加载数据
+myChart.setOption(option);
+//这里做定时器，用setInterval可以实现定时循环刷新
+setInterval(function () {
+    randomData();
+    if(info!=0)
+    {
+        if(info==1){
+            $("h3").text("主机监控详细情况(正在连接......)");
+        }
+        else{
+            $("h3").text("主机监控详细情况(连接远程服务器失败)");
+        }
+    }
+    else{
+        $("h3").text("主机监控详细情况(连接远程服务器成功)");
+    }
+    //传入前面xdata,ydata的赋值
+    myChart.setOption({
+        xAxis: [
+            {
+                type: 'category',
+                boundaryGap: false,
+                data: xdata
+            }
+        ],
+        series: ydata
+    });
+}, 1000*2);//5秒钟一刷新
+</script>
+{% endblock %}

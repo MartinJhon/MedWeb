@@ -1,0 +1,125 @@
+{% extends "mymanage/main.html" %}
+{% load static from staticfiles %}
+{% block main_js_css %}
+{% load static from staticfiles %}
+<script src="{% static 'mymanage/js/jquery.min.js' %}"></script>
+<script type="text/javascript">
+	function doenv(url){
+		if(confirm("要删除数据嘛?")){
+			window.location=url;
+		}
+	}
+</script>
+{% endblock %}
+{% block Main_body %}
+<div class="row">
+	<div class="span9">
+		<h1>
+			浏览商品信息
+		</h1>
+		<form class="form-inline" action="{% url 'mymanage_goods_index' 1 %}" method="get">
+			<div>
+				关键字：<input id="mytxt" type="text" name="txt_fname" value="{{request.GET.txt_fname}}" placeholder="商品名称" >
+				类别<select id="mysel" name="mysel1" >
+						<option value="0">--请选择--</option>
+						{% for i in tlist %}
+							<option value="{{i.id}}" {% if mysel1 == i.id %}selected{% endif %}>
+								{{i.pram}}|--{{i.name}}
+							</option>
+						{% endfor %}
+				</select>
+				状态<select id="mysel2" name="mysel2" style="width: 120px;">
+					<option value="0">--全部--</option>
+					<option value="1" {% if request.GET.mysel2 == '1' %}selected{% endif %}>新商品</option>
+					<option value="2" {% if request.GET.mysel2 == '2' %}selected{% endif %}>在售</option>
+					<option value="3" {% if request.GET.mysel2 == '3' %}selected{% endif %}>下架</option>
+				</select>
+				<input style="position: relative;top:0px;width: 100px;" class="btn" type="submit" name="but1" value="搜索">
+				<a href="{% url 'mymanage_goods_index' 1 %}" class="btn">全部</a>
+			</div>
+		</form>
+		<table class="table table-bordered table-striped table-hover" style="border-color: #8CE0F5;">
+			<thead style="background-color: #8CE0F5;">
+				<tr>
+					<th style="text-align: center;">
+						id号
+					</th>
+					<th style="text-align: center;"> 
+						商品名称
+					</th style="text-align: center;">
+					<th style="text-align: center;">
+						商品类别
+					</th style="text-align: center;">
+					<th style="text-align: center;">
+						图片
+					</th>
+					<th style="text-align: center;">
+						价格
+					</th>
+					<th style="text-align: center;">
+						点击量
+					</th>
+					<th style="text-align: center;">
+						状态
+					</th>
+					<th style="text-align: center;">
+						操作
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for i in goodslist %}
+					<tr>
+						<td style="text-align: center;">{{i.id}}</td>
+						<td style="text-align: center;">{{i.goods}}</td>
+						<td style="text-align: center;">{{i.tyname}}</td>
+						<td style="text-align: center;"><img src="{% static 'mymanage/goods/' %}{{i.picname}}" width="30px;"></td>
+						<td style="text-align: center;">{{i.price}}</td>
+						<td style="text-align: center;">{{i.clicknum}}</td>
+						<td style="text-align: center;">
+							{% if i.state == 1 %}
+								<span style="font-weight: bold;color: green;">新商品</span>
+							{% elif i.state == 2 %}
+								<span>在售</span>
+							{% else %}
+								<span style="font-weight: bold;color: red;">下架</span>
+							{% endif %}
+						</td>
+						<td style="text-align: center;">
+							<a href="{% url 'mymanage_goods_edit' i.id %}" class="btn btn-primary btn-lg active" style="background-color: #003DC9;" role="button">编辑</a>
+							<a href="javascript:doenv('{% url 'mymanage_goods_delete' i.id %}')" class="btn btn-primary btn-lg active" style="background-color: #E65753;" role="button">删除</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>				
+		<div class="pagination">
+			<ul id="myul">
+				<li class="disabled">
+					{% if pIndex|add:-1 > 0 %}
+						<a href="{% url 'mymanage_goods_index' pIndex|add:-1 %}?{{ mywhere|join:'&' }}">&laquo;</a>
+					{% endif %}
+
+				</li>
+				<!--增加分页栏-->
+				{% for j in plist %}
+					{% if j == pIndex %}
+						<li class="active">
+							<a href="{% url 'mymanage_goods_index' j %}?{{ mywhere|join:'&' }}">{{j}}</a>
+						</li>
+					{% else %}
+						<li>
+							<a href="{% url 'mymanage_goods_index' j %}?{{ mywhere|join:'&' }}">{{j}}</a>
+						</li>
+					{% endif %}
+				{% endfor %}
+				<li>
+					{% if pIndex|add:1 <= plist_len %}
+						<a href="{% url 'mymanage_goods_index' pIndex|add:1 %}?{{ mywhere|join:'&' }}">&raquo;</a>
+					{% endif %}
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+{% endblock %}

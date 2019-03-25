@@ -1,0 +1,168 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html lang="cn">
+	<head>
+		<meta charset="utf-8">
+		<title>网站后台管理</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="{% static 'mymanage/css/bootstrap.min.css' %}" rel="stylesheet">
+		<link href="{% static 'mymanage/css/bootstrap-responsive.min.css' %}" rel="stylesheet">
+		<link href="{% static 'mymanage/css/site.css' %}" rel="stylesheet">
+		<link href="{% static 'mymanage/css/mycss.css' %}"  rel="stylesheet">
+		<link rel="icon" href="{% static 'mymanage/img/tb1.ICO' %}">
+		<script src="{% static 'mymanage/js/jquery.min.js' %}"></script>
+		<script src="{% static 'mymanage/js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'mymanage/js/site.js' %}"></script>
+		<style type="text/css">
+			.span3 a:hover{
+				text-decoration:none;
+				font-weight: bold;
+				color: #FF6700;
+			}
+		</style>
+		<!--
+		<script type="text/javascript">
+			$(function(){
+				var txt = "{{ request.session.adminuser.username }}";
+				$.ajax({
+					url:"{% url 'mymanage_index_findphoto' %}",
+					async:true,
+					data: {'uname':txt},//传数据，没有为空字典或者不写这个字段
+					dataType:'json',
+					type:'get',
+					success:function(res){
+						var lis=res.data;
+
+						if(lis['uphoto'] != '')
+						{
+							$("#myimg").attr("src","{% static 'mymanage/tempimg/'%}"+lis['uphoto'])
+						}
+						else
+						{
+							$("#myimg").attr("src","{% static 'mymanage/img/tmp.jpg' %}")
+						}
+					},
+				});	
+			});
+		</script>-->
+		<!--[if lt IE 9]><script src="{% static 'mymanage/js/html5.js' %}"></script><![endif]-->
+		{% block main_js_css %}
+
+		{% endblock %}
+	</head>
+	<body>
+		<div class="container">
+            <!-- 页头开始 -->
+			<div class="navbar">
+				<div class="navbar-inner">
+					<div class="container">
+						<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a> <a class="brand" href="#">欢迎进入EG商城后台管理</a>
+						<div class="nav-collapse">
+							<ul class="nav">
+								<li class="active">
+									<a href="{% url 'index' %}">商品首页</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div><!-- 页头结束-->
+			
+            
+            <div class="row">
+				<div class="span3">
+                    <!-- 侧边导航开始 -->
+					<div class="well" style="padding: 8px 0;">
+						<div style="width: 250px;margin: 0 auto;">
+							<div style="border: 1px solid #666;">
+								{% if request.session.photo_eix_vip.photo == '1' %}
+									<img src="{% static 'mymanage/tempimg/' %}{{ request.session.vipuser.username }}.jpg" id="myimg" width="240" style="padding:5px;">
+								{% else %}
+									{% if request.session.photo_eix_vip.photo == '3' %}
+										<img src="{% static 'mymanage/tempimg/' %}{{ request.session.vipuser.username }}.gif" id="myimg" width="240" style="padding:5px;">
+									{% else %}
+										<img src="{% static 'mymanage/img/tmp.jpg' %}" id="myimg" width="240" style="padding:5px;">
+									{% endif %}
+								{% endif %}
+							</div>
+							<div style="margin-top: 10px;">
+								<ul style="list-style: none;">
+									<li style="float: left;position: relative;left: -25px;">
+										<span>登录：</span><a href="{% url 'myweb_editvip' request.session.vipuser.id %}">{{ request.session.vipuser.username }}</a>
+									</li>
+									<li style="float: right;margin-right: 5px;">
+										<a href="{% url 'myweb_exitweb' %}">退出</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div style="clear: both;width: 100%;"></div><br>
+						<ul class="nav nav-list">
+							<li class="nav-header">
+								功能模块区
+							</li>
+							<li class="active">
+								<a href="{% url 'index' %}"><i class="icon-white icon-home"></i> 商品首页</a>
+							</li>
+							<li class="nav-header">
+								VIP管理
+							</li>
+							<li>
+								<a href="{% url 'myweb_editvip' request.session.vipuser.id %}" ><i class="icon-folder-open"></i> 浏览资料</a>
+							</li>
+							<li>
+								<a href="{% url 'myweb_editvpawd' request.session.vipuser.id %}" ><i class="icon-check"></i> 修改密码</a>
+							</li>
+							<li class="nav-header">
+								订单中心
+							</li>
+							<li>
+								<a href="{% url 'myweb_order_showlist' %}" ><i class="icon-folder-open"></i> 订单浏览</a>
+							</li>
+							<li>
+								<a href="{% url 'myweb_order_showlist' 1 %}?state=1"><i class="icon-check"></i> 未处理订单</a>
+							</li>
+							<li>
+								<a href="{% url 'myweb_order_showlist' 1 %}?state=3"><i class="icon-check"></i> 撤销订单</a>
+							</li>
+						</ul>
+					</div><!-- 侧边导航结束 -->
+				</div>
+				<div class="span9">
+                    <!-- 主体开始 -->
+					{% block Main_body %}
+
+					{% endblock %}
+                    <!-- 主体结束 -->
+				</div>
+			</div>
+			<hr>
+			<div class="foot" style="text-align: center;">
+				<!--页尾内容开始-->
+				<div>
+					<p style="text-align: center;position: relative;left: 300px;">
+						<span class="class_span"><a href="#">虎牙商城</a></span>
+						<span class="class_span">|</span>
+						<span class="class_span"><a href="#">嘉里商城</a></span>
+						<span class="class_span">|</span>
+						<span class="class_span"><a href="#">计生商城</a></span>
+						<span class="class_span">|</span>
+						<span class="class_span"><a href="#">婚姻商城</a></span>
+						<span class="class_span">|</span>
+						<span class="class_span"><a href="#">恋爱商城</a></span>
+						<span class="class_span">|</span>
+						<span class="class_span"><a href="#">亲子商城</a></span>
+						<span class="class_span">|</span>
+						<span class="class_span"><a href="#">三代商城</a></span>
+					</p>
+				</div>
+				<!--页尾内容结束-->
+			</div>
+			<div style="clear: both;width: 100%"></div>
+			<div style="text-align: center;margin-top: 10px;">
+				<p>广东省珠海市EG商贸有限公司</p>
+				<p>&copy; Company 2018</p>
+			</div>
+		</div>
+	</body>
+</html>

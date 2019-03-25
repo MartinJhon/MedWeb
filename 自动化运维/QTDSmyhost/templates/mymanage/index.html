@@ -1,0 +1,42 @@
+{% extends "mymanage/main.html" %}
+
+{% block Main_body %}
+<div class="row">
+	<div class="span9">
+		<h1>
+			信息浏览集合
+		</h1>
+		<hr>
+		<div class="row">
+		  <div class="mydiv">
+		  	<div class="mydiv_a"><a href="{% url 'mymanage_user_index' 1 %}"><img src="../static/mymanage/img/hy.jpg" width="250px"></a></div>
+		  	<div class="mydiv_b" style="margin-top: 15px;">
+		  		<ul class="mydiv_c">
+		  			<li class="mydiv_d">功能：用户信息浏览</li>
+		  			<li class="mydiv_d">用途：快速进入通道</li>
+		  			<li class="mydiv_d">关联：增加、修改、删除</li>
+		  		</ul>
+		  	</div>
+		  </div>
+		  <div class="mydiv">
+		  	<div class="mydiv_a"><a href="{% url 'mymanage_host_monitor' %}"><img src="../static/mymanage/img/prod_type.jpg" width="250px"></a></div>
+		  	<div class="mydiv_b" style="margin-top: 15px;">
+		  		<ul class="mydiv_c">
+		  			<li class="mydiv_d">功能：监控主机信息</li>
+		  			<li class="mydiv_d">用途：快速进入通道</li>
+		  			<li class="mydiv_d">关联：监控数据中第一个主机信息</li>
+		  		</ul>
+		  	</div>
+		  </div>
+		  <div class="mydiv">
+		  	<div class="mydiv_a"><a href="{% url 'mymanage_goods_index' 1 %}"><img src="../static/mymanage/img/prod.jpg" width="250px"></a></div>
+	  		<ul class="mydiv_c">
+	  			<li class="mydiv_d">功能：主机信息浏览</li>
+	  			<li class="mydiv_d">用途：快速进入通道</li>
+	  			<li class="mydiv_d">关联：增加、修改、删除</li>
+	  		</ul>
+		  </div>
+		</div>
+	</div>
+</div>
+{% endblock %}

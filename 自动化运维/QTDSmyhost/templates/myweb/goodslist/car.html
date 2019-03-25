@@ -1,0 +1,335 @@
+{% extends "myweb/index.html" %}
+{% load static from staticfiles %}
+{% block css %}
+<style type="text/css">
+  body,div,ul,li,a,img{
+    margin: 0px;
+    padding: 0px;
+  }
+
+  div{
+    display: block;
+  }
+
+  .pro_a{
+    position: relative;
+    background: #fff;
+    border-top: 0px solid #e0e0e0;
+    border-bottom: 2px solid #FF6700;
+    height: 60px;
+    width: 100%;
+    margin-top: 0;
+    color: #616161;
+  }
+  .pro_b{
+    position: relative;
+    height: 60px;
+    width: 100%;
+    margin-top: 0;
+    color: #616161;    
+  }
+  .pro_container{
+    width: 1226px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .pro_container div a{
+    text-decoration: none;
+    color: #616161;
+    font:  13px 黑体;
+  }
+  .pro_container div a:hover{
+    text-decoration: none;
+    color: #FF6700;
+  }
+  .pro_c{
+    background: #f7f7f7;
+    width: 100%;
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    color: #333;
+  }
+
+  .pro_d{
+    position: relative;
+    background: #fff;
+    border-bottom: 2px solid #FF6700;
+    width: 100%;
+    margin-top: 0;
+    color: #616161;
+  }
+  .foot ul li a{
+    color: #616161;
+  }
+
+  .foot ul li a:hover{
+    color: #FF6700;
+  }
+  .login{
+    border-color: #ff6700;background: #ff6700;
+  }
+
+  .login:hover{
+    border-color: #B3EFA5;background: #4E8A3F;
+  }
+
+  .buyt{
+    border: 1px solid #ff6700;
+    color: #ff6700;
+  }
+
+  .buyt:hover{
+    border: 1px solid #ff6700;
+    border-color: #4E8A3F;
+    color: #4E8A3F;
+  }
+</style>
+{% endblock %}
+{% block js%}
+<script src="{% static 'mymanage/js/jquery.min.js' %}"></script>
+<script type="text/javascript">
+  $(function(){
+
+    $(".bat ul li:first").mouseover(function(){
+      $(".bat ul li a img:first").attr("src","{% static 'myweb/img/buy2.png' %}");
+    });
+
+    $(".bat ul li:first").mouseout(function(){
+      $(".bat ul li a img:first").attr("src","{% static 'myweb/img/buy1.png' %}");
+    });
+
+    $(".bat ul li:last").mouseover(function(){
+      $(".bat ul li a img:last").attr("src","{% static 'myweb/img/ok2.png' %}");
+    });
+
+    $(".bat ul li:last").mouseout(function(){
+      $(".bat ul li a img:last").attr("src","{% static 'myweb/img/ok1.png' %}");
+    });
+
+    $("table.taheard input.myall").click(function(){
+      //获取当前全选择框是否选中
+      b = $(this).prop('checked');
+        //获取所有商品的选择框
+      $("table.mylist input.shop-item").prop("checked",b);
+
+      loadTotal();
+    });
+
+    $(".bootm input.all").click(function(){
+      //获取当前全选择框是否选中
+      b = $(this).prop('checked');
+        //获取所有商品的选择框
+      $("table.mylist input.shop-item").prop("checked",b);
+
+      loadTotal();
+    });
+
+    $("table.mylist :checkbox").click(function(){
+      loadTotal();
+    });
+  });
+
+  //统计总计金额函数
+  function loadTotal(){
+      idlist=[];
+      //获取表格中所有选中的选择框节点对象，
+      list = $("table.mylist input.shop-item:checked");
+      
+      $("span.mycount").html(list.length); //数量
+      
+      var total=0
+      //遍历累计总金额
+      list.each(function(){
+          total += parseFloat($(this).attr('price'));
+          //idlist[idlist.length] = $(this).attr('ids');
+          idlist.push($(this).attr('gid'));
+      });
+      $("span.total").html("￥"+total);
+      return idlist;
+  }
+</script>
+{% endblock %}
+{% block types %}
+  {% for i in utype %}
+      <li style="margin-top: 10px;margin-left: 5px;"><a href="{% url 'myweb_Type_list' 1 %}?tid={{i.id}}">{{i.name}}</a></li>
+  {% endfor %}
+{% endblock %}
+
+{% block contains %}
+<div style="display: block;margin-top: -20px;background-color: #f5f5f5;">
+  <div>
+    <!--头部说明-->
+      <div class="pro_a">
+        <div class="pro_b">
+          <div class="pro_container">
+            {% if request.session.vipuser %}
+              <div style="display: inline-block;line-height: 60px;float: left;margin-left: -900px;">
+                <h2>
+                  欢迎【{{request.session.vipuser.username}}】进入购物车
+                </h2>
+              </div>
+              <div style="display: inline-block;float: right;margin-top: 20px;">
+                <a href="{% url 'myweb_editvip' request.session.vipuser.id %}" style="display: inline-block;">进入会员中心</a>
+                <span>|</span>
+                <a href="javascript:doenv('{% url 'myweb_exitweb' %}')" style="display: inline-block;">退出</a>
+              </div>
+            {% else %}
+              <div style="display: inline-block;line-height: 60px;float: left;margin-left: -900px;">
+                <h2>
+                  欢迎进入购物车
+                </h2>
+              </div>
+              <div style="display: inline-block;float: right;margin-top: 20px;">
+                <a href="{% url 'myweb_register' %}" style="display: inline-block;">登录</a>
+                <span>|</span>
+                <a href="{% url 'myweb_reguser' %}" style="display: inline-block;">注册</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    <!--头部说明结束-->
+    <div style="clear: both;width: 100%;"></div>
+    <!--主体说明开始-->
+    <div class="pro_container">
+      {% if request.session.vipuser == none or request.session.shoplist|length == 0 %}
+      <!--无物品开始-->
+      <div style="margin-top: 100px;margin-bottom: 30px;">
+        <div style="display: inline-block;height: 273px;width: 559px;background: #b0b0b0 url({% static 'myweb/img/buycar.png' %}) no-repeat;">
+        </div>
+        <div style="display: inline-block;margin-top: 50px;float: right;margin-right:300px;">
+          <h1 style="display: block;font-weight: bold;color: #B0B0B0;font-size: 36px;">您的购物车空荡荡！</h1>
+          <p style="display: block;line-height: 30px;font-size: 15px;">空空荡荡可能是没有登录或者购物。</p>
+          <ul style="display: block;margin-top: 30px;">
+            <li style="display: inline-block;"><a class="login" href="{% url 'myweb_register' %}" style="display: block;line-height: 48px;font-size: 14px;text-align: center;width: 170px;height: 50px;color: #FFFFFF;">立即登录</a></li>
+            <li style="display: inline-block;"><a class="buyt" href="{% url 'index' %}" style="display: block;line-height: 48px;font-size: 14px;text-align: center;width: 170px;height: 50px;">马上购物</a></li>
+          </ul>
+        </div>
+      </div>
+      <!--无物品结束-->
+      {% else %}
+      <div>
+        <!--表格列头-->
+        <table class="taheard" width="100%" border="0px" cellpadding="0" cellspacing="0" style="font: bold 15px 宋体;">
+          <tbody style="background-color: #FFFFFF;border: 1px solid #FFFFFF;line-height: 40px;">
+            <tr>
+              <td>
+                <div>
+                <div class="mytck" style="display: inline-block;position: relative;top: 2px;"><input class="myall" type="checkbox" name="all" style="width: 15px;height: 15px;"></div>
+                <span style="display: inline-block;">全选</span>
+                </div>
+              </td>
+              <td width="350px">商品</td>
+              <td width="250px">单价(元)</td>
+              <td width="150px">数量</td>
+              <td width="150px">小计(元)</td>
+              <td>操作</td>
+            </tr>
+          </tbody>
+        </table>
+        <!--表格列头结束-->
+        <!--表格内容-->
+        <div>
+          <table class="mylist" table width="100%" border="0px" cellpadding="0" cellspacing="0" style="font: bold 15px 宋体;margin-top: 5px;">
+            <tbody style="background-color: #FFFFFF;border: 1px solid #FFFFFF;line-height: 40px;">
+              {% for shop in request.session.shoplist.values %}
+                <tr style="border-bottom: 1px solid #333;">
+                  <td width="215px">
+                    <div style="display: inline-block;position: relative;top: -20px;" class="mytbck" >
+                      <input class="shop-item" type="checkbox" name="myckbox" gid="{{shop.id}}" price="{% widthratio  shop.price 1 shop.m %}">
+                    </div>
+                    <a style="display: inline-block;margin-top: 10px;" href="{% url 'myweb_list' shop.id %}" style="display: inline-block;"  target="_blank">
+                      <img src="{% static 'mymanage/goods/s_' %}{{shop.picname}}" style="display: inline-block;" alt="{{ shop.goods }}" width="50">
+                    </a>
+                  </td>
+
+                  <td width="350px">
+                    <a style="display: inline-block;" href="{% url 'myweb_list' shop.id %}" target="_blank">
+                      <span>{{ shop.goods }}</span>
+                    </a>
+                    <!--
+                    <span style="display: inline-block;">{{ shop.price }}</span>
+                    <div>
+                      <button style="display: inline-block;"></button>
+                      <div style="display: inline-block;"><input value="1" type="text" style="width: 50px;"></div>
+                      <button style="display: inline-block;"></button>
+                    </div>
+                    -->
+                  </td>
+
+                  <td width="200px">
+                    <span>{{ shop.price}}</span>
+                  </td>
+
+                <td width="200px">
+                    <div>
+                      <button style="display: inline-block;width: 30px;height: 30px;" onclick="window.location='{% url 'myweb_car_updatecar' %}?gid={{shop.id}}&num={{shop.m|add:-1}}'">↓</button>
+                      <div style="display: inline-block;"><input style="width: 50px;height: 30px;text-align: center;" value="{{ shop.m }}" onblur="window.location='{% url 'myweb_car_updatecar' %}?gid={{shop.id}}&num='+this.value" type="text"></div>
+                      <button style="display: inline-block;width: 30px;height: 30px;" onclick="window.location='{% url 'myweb_car_updatecar' %}?gid={{shop.id}}&num={{shop.m|add:1}}'">↑</button>
+                    </div>
+                </td>
+
+                <td width="150px">
+                  <span style="font: bold 20px 黑体;color:#666666;">{% widthratio  shop.price 1 shop.m %}</span>
+                </td>
+
+                <td>
+                  <a href="{% url 'myweb_car_delcar' shop.id %}" title="删除">
+                  <div>
+                    <span>删除</span>
+                  </div>
+                  </a>
+                </td>
+
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div style="clear: both;width: 100%;"></div>
+        <div style="display: block;width: 100%;height: 50px;background: #FFFFFF;margin-top: 10px;">
+          <div class="bootm" style="display: inline-block;font: bold 15px 宋体;color: #FF6700;line-height: 50px;">
+            <input type="checkbox" class="all"  name="allck" style="width: 15px;height: 15px;"><span>全选</span>
+            <span>共[<span class="mycount">0</span>]件商品</span>
+            <a href="{% url 'myweb_car_clearcar' %}" style="display:inline-block;line-height: 40px;width: 100px;height: 40px;border: 1px solid #F64C1E;border-radius: 5px 5px;text-align: center;color: #FFFFFF;background:#F64C1E;margin-left: 30px;">清理购物车</a>
+            <a href="{% url 'index' %}" style="display:inline-block;line-height: 40px;width: 100px;height: 40px;border: 1px solid #5CB85C;border-radius: 5px 5px;text-align: center;color: #FFFFFF;background:#5CB85C;margin-left: 5px;">继续购物</a>
+          </div>
+          <div style="display: inline-block;float: right;margin-right: 300px;margin-top: 15px;">
+            <span style="font: bold 15px 宋体;">
+            <span>已优惠</span>
+            <span style="color: red;font: bold;">0.00</span>
+            <span>元， 合计(不含运费)：</span>
+            <span class="total" style="color: red;font: bold 20px 宋体;">0.0</span>
+            </span> 
+          </div>
+          <div onclick="window.location='{% url 'myweb_order_add' %}?ids='+loadTotal().join(',')" style="display:inline-block;cursor: pointer;line-height: 40px;width: 100px;height: 40px;border: 1px solid #00C3F5;border-radius: 5px 5px;text-align: center;color: #FFFFFF;background:#00C3F5;position: relative;left: 650px;">去结算</div>
+        </div>
+        <!--表格内容结束-->
+      </div>
+      {% endif %}
+    </div>
+    <!--主体说明结束-->
+  </div>
+  <!--底部说明开始-->
+  <div class="pro_d">
+  </div>
+  <div style="clear: both;width: 100%;"></div>
+  <!--底部说明结束-->
+</div>
+  <div class="foot" style="font-size: 20px;text-align: center;position: relative;top: 20px;">
+    <ul>
+      <li style="display: inline-block;margin-left: 15px;"><a href="#" >虎牙商城</a><span style="display: inline-block;margin-left: 20px;">|</span></li>
+      <li style="display: inline-block;margin-left: 15px;"><a href="#" >嘉里商城</a><span style="display: inline-block;margin-left: 20px;">|</span></li>
+      <li style="display: inline-block;margin-left: 15px;"><a href="#" >计生商城</a><span style="display: inline-block;margin-left: 20px;">|</span></li>
+      <li style="display: inline-block;margin-left: 15px;"><a href="#" >婚姻商城</a><span style="display: inline-block;margin-left: 20px;">|</span></li>
+      <li style="display: inline-block;margin-left: 15px;"><a href="#" >恋爱商城</a><span style="display: inline-block;margin-left: 20px;">|</span></li>
+      <li style="display: inline-block;margin-left: 15px;"><a href="#" >亲子商城</a><span style="display: inline-block;margin-left: 20px;">|</span></li>
+      <li style="display: inline-block;margin-left: 15px;"><a href="#" >三代商城</a></li>
+    </ul>
+  </div>
+  <div style="font-size: 20px;text-align: center; margin-top: 10px;position: relative;top: 20px;">
+    <p style="color: #999999;font-size: 13px;">版权:EG商城信息有限公司-粤备案号(68888688)</p>
+  </div>
+{% endblock %}
+

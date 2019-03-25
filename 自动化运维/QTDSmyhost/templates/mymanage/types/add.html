@@ -1,0 +1,40 @@
+{% extends "mymanage/main.html" %}
+{% load static from staticfiles %}
+{% block main_js_css %}
+<script src="{% static 'mymanage/js/jquery.min.js' %}"></script>
+{% endblock %}
+{% block Main_body %}
+<div class="row">
+	<div class="span9">
+		<h1>
+			增加商品类别信息
+		</h1>
+		<form id="edit-profile" class="form-horizontal" method="post" action="{% url 'mymanage_type_insert' %}" >
+			{% csrf_token %}
+			<fieldset>
+				<legend>当前编辑窗口</legend>
+				<input type="hidden" name="txt_pid" class="input-xlarge" id="input01" value="{{pid}}" />
+				<input type="hidden" name="txt_path" class="input-xlarge" id="input01" value="{{path}}"/>
+				<div class="control-group">
+					<label class="control-label" for="input01">父级目录:</label>
+					<div class="controls">
+						<input type="text" disabled="true" name="txt_user" class="input-xlarge" id="input01" value="{{name}}" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="input01">商品类别名称:</label>
+					<div class="controls">
+						<input type="text" name="txt_name" class="input-xlarge" id="input01" />
+					</div>
+				</div>
+
+				<div style="margin-left: 180px;">					
+					<button id="mybtu" type="submit" class="btn btn-primary" style="width: 100px;">保存</button>
+					<button type="reset" class="btn" style="margin-left: 5px;">重置</button>
+				</div>	
+			</fieldset>
+		</form>				
+	</div>
+</div>
+{% endblock %}

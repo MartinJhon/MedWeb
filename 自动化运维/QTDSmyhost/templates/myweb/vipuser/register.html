@@ -1,0 +1,228 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>在线注册</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="{% static 'mymanage/img/tb1.ICO' %}">
+	<script src="{% static 'mymanage/js/jquery.min.js' %}"></script>
+	<script src="{% static 'myweb/js/bootstrap.min.js' %}"></script>
+	<style type="text/css">
+		div,ul,li,a{margin:0px;padding:0px;}
+		ul{list-style: none;}
+	    body {
+	        margin: 0;
+	    }
+
+	    .h_logo {
+	        width: 200px;
+	        height: 98px;
+	        background:url('{% static 'myweb/img/login.jpg' %}') no-repeat ;
+	    }
+
+	    .h_logo a {
+	        display: block;
+	        height: 98px;
+	        text-indent: -9999em;
+	    }
+
+	    .login_banner_panel {
+	        /* background:#1e2f40;*/
+	        width: 100%;
+	        height: 588px;
+	        position: absolute;
+	        left: 0;
+	        top: 98px;
+	        display: block;
+	        z-index: 3;
+	    }
+
+		.layout {
+		    width: 410px;
+		    min-height: 524px;
+		    margin-bottom: 0;
+		    margin-right: 0;
+		    font-size: 14px;
+		    position: relative;
+		    margin:0 auto 20px;
+		    z-index: 4;
+		}
+		.myi{
+			display: inline-block;
+			margin-top: 30px;
+			margin-left: 55px;
+			color: #424242;
+			font:normal 23px '微软雅黑';
+		}
+		a{
+			color: #424242;
+			text-decoration: none;
+		}
+		a:hover{
+			color:#FF6600;
+			text-decoration: none;
+		}
+
+		div a{
+			color:#999999;;
+			text-decoration: none;
+		}
+
+		div a:hover{
+			color:#FF6600;
+			text-decoration: none;			
+		}
+		.text{border:1px solid #E0E0E0;width:350px;height:52px;}
+		.mytxt[disabled=disabled]{color:#FFF}
+		.btnadpt {
+		    background-color: #ef5b00;
+		    width: 352px;
+		    height: 50px;
+		    line-height: 50px;
+		    display: block;
+		    margin-bottom: 14px;
+		    margin-left: 25px;
+		    margin-top: 30px;
+		    text-align: center;
+		    font-size: 14px;
+		    color: #fff;
+		    cursor: pointer;
+		    border-width: 0px;
+		}
+
+		.mylink {
+		    width: 30px;
+		    height: 30px;
+		    margin: 0 12px;
+		    display: inline-block;
+		    -webkit-border-radius: 50%;
+		    -moz-border-radius: 50%;
+		    -o-border-radius: 50%;
+		    border-radius: 50%;
+		}
+	</style>
+	<script type="text/javascript">
+		$(function(){
+			var str='{{info}}';
+			$(".mya").click(function(){
+				var str=$(this).text();
+				if(str=='账号登录')
+				{
+					$(".mya").css("color","#424242");
+					$(this).css("color","#FF6600");
+					$("#pic_login").css("display","block");
+					$("#pic_sm").css("display","none");
+				}
+				else if(str=='扫描登录')
+				{
+					$(".mya").css("color","#424242");
+					$(this).css("color","#FF6600");
+					$("#pic_login").css("display","none");
+					$("#pic_sm").css("display","block");
+				}
+			});
+			if(str.match("不")=='不')
+			{
+				$(".text:first").css("border","1px solid #FF6600");
+			}
+
+			$(".txt").focus(function(){
+				$(".txt").keydown(function(){
+					$(".text").css("border","1px solid #E0E0E0");
+					$("#myinfo").css("display","none");
+				});				
+			});
+		});
+	</script>
+	<!--[if lt IE 9]><script src="{% static 'mymanage/js/html5.js' %}"></script><![endif]-->
+</head>
+<body>
+	<div style="width: 1130px;margin:0px auto;">
+		<div style="display: block;">
+			<a href="{% url 'index' %}">
+			<div class="h_logo" style="width: 200px;height: 98px;margin-top: 5px;">
+				
+			</div></a>
+		</div>
+		<div class="login_banner_panel" style="background-image:url('{% static 'myweb/img/heng.jpg' %}');background-repeat: no-repeat;background-position: top center;">
+			
+		</div>
+		<div style="position: absolute;padding-bottom: 0px; left: 58%;">
+			<div class="layout">
+				<div style="width: 410px;height: 524px;background-color: #ffffff;display:block;margin-top: 33px;">
+					<div>
+						<div>
+							<span class="myi"><a class="mya" href="#" style="color: #FF6600;">账号登录</a></span><span style="display: inline-block;font:normal 23px '微软雅黑';margin-left: 55px;margin-top: 30px;color: #E0E0E0;">|</span><span class="myi"><a class="mya" href="#">扫描登录</a></span>
+						</div>
+						<div id="pic_login">
+							<form autocomplete="off" action="{% url 'myweb_logon' %}" method="post" >
+								{% csrf_token %}
+								<div class="text" style="position: relative;margin-top: 30px; margin-left: 25px;">
+									<label style="border:0 none;border-bottom:1px solid #845f3f;margin-bottom:10px;">
+								  		<input class="txt" type="text" name="txt_name" placeholder="会员名/手机号/邮箱" style="-webkit-box-flex:1;flex-grow:1;float: none;background: 0;border:0 none;display: block;margin-top: 5px;padding: 13px 16px 13px 14px;width: 320px;line-height: 22px;height: 22px;outline: 0;;font-family: arial Hiragino Sans GB Microsoft YaHei sans-serif;border-width: 0px;">
+									</label>
+								</div>
+
+								<div class="text" style="position: relative;margin-top: 30px; margin-left: 25px;">
+									<label style="border:0 none;border-bottom:1px solid #845f3f;margin-bottom:10px;">
+								  		<input class="txt" type="password" name="txt_pwd" placeholder="密码" style="-webkit-box-flex:1;flex-grow:1;float: none;background: 0;border:0 none;display: block;margin-top: 5px;padding: 13px 16px 13px 14px;width: 320px;line-height: 22px;height: 22px;outline: 0;;font-family: arial Hiragino Sans GB Microsoft YaHei sans-serif;border-width: 0px;">
+									</label>
+								</div>
+								<div id="myinfo" style="margin-top: 10px;margin-left: 26px;background: url('{% static 'myweb/img/title.jpg' %}') no-repeat;">
+									<span style="display: block;margin-left: 20px;position: relative;top:0px;color:#FF6600;font:normal 12px '宋体';">{{info}}</span>
+								</div>
+								<input type="submit" class="btnadpt" name="mybut" value="登录" style="margin-top: 15px;">
+								<div>
+									<span style="margin-left: 25px;"><a href="#" style="color: #FF6600;">手机短信登录/注册</a></span>
+									<div style="float: right;text-align: center;margin-right: 35px;">
+										<a href="{% url 'myweb_reguser' %}" >立即注册</a>
+										<span style="color:#999999;">|</span>
+										<a href="#" >忘记密码</a>
+									</div>
+								</div>
+								<div>
+									<fieldset style="border: 0;border-top: 1px solid #e0e0e0;width: 320px;margin-top: 20px;margin-left: 25px;">
+										<legend align="center" style="font-size: 14px;margin:0 auto;text-align: center;color: #bbb;">
+											其他登录方式
+										</legend>
+									</fieldset>
+									<div style="padding-top: 3px;text-align: center;">
+										<a class="mylink" title="QQ登录" style="color: #0288d1;width: 50px;height: 60px;background: url('{% static 'myweb/img/login.png' %}') no-repeat 0px -5px;" href=""><i></i></a>
+										<a class="mylink" title="微博登录" style="color: #0288d1;width: 50px;height: 60px;background: url('{% static 'myweb/img/login.png' %}') no-repeat -71px -5px;" href=""><i></i></a>
+										<a class="mylink" title="支付宝登录" style="color: #0288d1;width: 50px;height: 60px;background: url('{% static 'myweb/img/login.png' %}') no-repeat -139px -5px;" href=""><i></i></a>
+										<a class="mylink" title="微信登录" style="color: #0288d1;width: 50px;height: 60px;background: url('{% static 'myweb/img/login.png' %}') no-repeat -208px -5px;" href=""><i></i></a>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div id="pic_sm" style="display: none;margin-top: 50px;margin-left: 65px;">
+							<div>
+								<img src="{% static 'myweb/img/eg.png' %}">
+							</div>
+							<div>
+								<p style="margin-left: 10px;">使用EG商城App扫一扫更轻松,更便捷^-^</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="clear: both;width: 100%;"></div>
+		<div style="display: inline-block;width: 100%;position: relative;z-index: 6;top: 600px;left: 465px;">
+			<ul>
+				<li style="display: inline-block;margin-left: 10px;"><a href="#">虎牙商城</a><span style="display: inline-block;margin-left: 15px;">|</span></li>
+				<li style="display: inline-block;margin-left: 10px;"><a href="#">嘉里商城</a><span style="display: inline-block;margin-left: 15px;">|</span></li>
+				<li style="display: inline-block;margin-left: 10px;"><a href="#">计生商城</a><span style="display: inline-block;margin-left: 15px;">|</span></li>
+				<li style="display: inline-block;margin-left: 10px;"><a href="#">婚姻商城</a><span style="display: inline-block;margin-left: 15px;">|</span></li>
+				<li style="display: inline-block;margin-left: 10px;"><a href="#">恋爱商城</a><span style="display: inline-block;margin-left: 15px;">|</span></li>
+				<li style="display: inline-block;margin-left: 10px;"><a href="#">亲子商城</a><span style="display: inline-block;margin-left: 15px;">|</span></li>
+				<li style="display: inline-block;margin-left: 10px;"><a href="#">三代商城</a></li>
+			</ul>
+		</div>
+		<div style="display: block;position: relative;top: 600px;left: 850px;">
+			<p style="color: #999999;font-size: 13px;">版权:EG商城信息有限公司-粤备案号(68888688)</p>
+		</div>
+	</div>
+</body>
+</html>

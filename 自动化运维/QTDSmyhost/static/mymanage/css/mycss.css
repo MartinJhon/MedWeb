@@ -1,0 +1,13 @@
+/*定义后台管理主页信息统一集合区样式*/
+.mydiv{float: left;margin:5px;margin-left: 32px;}
+.mydiv_a{border: 1px solid #0088CC;border-radius:20px 20px 20px 20px;}
+.mydiv_a:hover{border: 2px solid #FF6700;box-shadow:3px 3px 3px 3px #4C4947;}
+.mydiv_a img{margin:5px;}
+.mydiv_b{margin-top: 20px;}
+.mydiv_c{list-style: none;position: relative;left: -22px;}
+.mydiv_d{display: block;line-height: 20px;margin-top: 10px;font: bold 15px 黑体;color: #EF9A01;}
+
+/*页尾内容定义*/
+.class_span{margin:10px;font-weight: bold;font-size: 15px;font-family: "黑体";}
+.class_span a{color: #424242;}
+.class_span a:hover{color: #FF6700;}

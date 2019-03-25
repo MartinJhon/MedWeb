@@ -1,0 +1,108 @@
+{% extends "mymanage/main.html" %}
+{% load static from staticfiles %}
+{% block main_js_css %}
+<script src="{% static 'mymanage/js/jquery.min.js' %}"></script>
+<script type="text/javascript">
+	$(function(){
+		$("input[type='file']").change(function(){
+			//alert(file.split('\\').pop());
+			//选择后预览照片
+			//alert(URL.createObjectURL($(this)[0].files[0]));
+			$(".myimg").attr("src",URL.createObjectURL($(this)[0].files[0]));
+		});
+	});
+</script>
+{% endblock %}
+{% block Main_body %}
+<div class="row">
+	<div class="span9">
+		<h1>
+			编辑商品信息
+		</h1>
+		<form id="edit-profile" class="form-horizontal" method="post" action="{% url 'mymanage_goods_update' %}" enctype="multipart/form-data">
+			{% csrf_token %}
+			<input type="hidden" name="txt_id" value="{{list.id}}" class="input-xlarge" id="input01" />
+			<fieldset>
+				<legend>当前编辑窗口</legend>
+				<div class="control-group">
+					<label class="control-label" for="input01">商品类别：</label>
+					<div class="controls">
+						<select name="txt_type" >
+							{% for i in tlist %}
+								<option value="{{i.id}}" 
+									{% if i.pid == 0 %}
+										disabled="true" 
+									{% endif %}
+									{% if i.id == list.typeid %}
+										selected="true" 
+									{% endif %}>
+									{{i.pram}}|--{{i.name}}
+								</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="input01">商品名称:</label>
+					<div class="controls">
+						<input type="text" name="txt_name" value="{{list.goods}}" class="input-xlarge" id="input01" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="input01">生成厂家:</label>
+					<div class="controls">
+						<input type="text" name="txt_pro" value="{{list.company}}" class="input-xlarge" id="input01" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="input01">价格:</label>
+					<div class="controls">
+						<input type="text" name="txt_price" value="{{list.price}}" class="input-xlarge" id="input01"/>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="optionsCheckbox">状态:</label>
+					<div class="controls">
+						<input type="radio" name="ra_rob" id="optionsCheckbox" value="1" {% if list.state == 1%} checked="true" {% endif %} />新商品
+						<input type="radio" name="ra_rob" id="optionsCheckbox" value="2" {% if list.state == 2%} checked="true" {% endif %} />在售
+						<input type="radio" name="ra_rob" id="optionsCheckbox" value="3" {% if list.state == 3%} checked="true" {% endif %} />下架
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="input01">描述:</label>
+					<div class="controls">
+						<textarea cols="40" rows="10" style="width: 270px;height: 200px;" name="txt_text">
+							{{list.content}}
+						</textarea>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="fileInput">Photo</label>
+					<div class="controls">
+						<input class="input-file" name="txt_photo" id="fileInput" type="file" />
+					</div>
+				</div>
+
+				<div style="margin-left: 180px;">					
+					<button id="mybtu" type="submit" class="btn btn-primary" style="width: 100px;">保存</button>
+					<button type="reset" class="btn" style="margin-left: 5px;">重置</button>
+				</div>
+				<div style="width: 280px;position: relative;top:-560px;left: 500px;">
+					<div style="width: 260px;border: 1px solid #666;">
+						<img class="myimg" name="myphoto" src="{% static 'mymanage/goods/' %}{{list.picname}}" width="250px" style="margin: 5px;" />
+					</div>
+					<div style="text-align: center;margin-top: 10px;font: bold 10px 黑体;">
+						<span>商品图片</span>
+					</div>
+				</div>
+			</fieldset>
+		</form>				
+	</div>
+</div>
+{% endblock %}

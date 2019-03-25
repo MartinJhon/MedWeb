@@ -1,0 +1,95 @@
+{% extends "mymanage/main.html" %}
+{% load static from staticfiles %}
+{% block main_js_css %}
+<script src="{% static 'mymanage/js/jquery.min.js' %}"></script>
+<script type="text/javascript">
+function checkNull()
+{
+
+    //判断IP
+    var strip=$("input[name='txt_ip']").val();
+    if(strip=="")
+    {
+        alert("主机IP不能为空!");
+        return false;
+    }
+    if(name.length>15)
+    {
+        alert("主机IP长度不能超过15!");
+        return false;
+    }
+    if(strip.match(/^(?:(?:2[0-4][0-9]\.)|(?:25[0-5]\.)|(?:1[0-9][0-9]\.)|(?:[1-9][0-9]\.)|(?:[0-9]\.)){3}(?:(?:2[0-5][0-5])|(?:25[0-5])|(?:1[0-9][0-9])|(?:[1-9][0-9])|(?:[0-9]))/)==null)
+    {
+        alert("IP格式只能是数字和.组合!");
+        return false;
+    }
+
+    return true;
+}
+</script>
+{% endblock %}
+{% block Main_body %}
+<div class="row">
+	<div class="span9">
+		<h1>
+			修改主机信息
+		</h1>
+		<form id="edit-profile" class="form-horizontal" method="post" action="{% url 'mymanage_host_update' %}" onsubmit="return checkNull();">
+			{% csrf_token %}
+			<fieldset>
+				<legend>当前编辑窗口</legend>
+
+				<div class="control-group">
+					<label class="control-label" for="input01">主机名称:</label>
+					<div class="controls">
+						<input type="text" name="txt_name" value="{{list.name}}" class="input-xlarge" id="input01" />
+					</div>
+				</div>
+				<input type="hidden" name="txt_id" value="{{list.id}}" class="input-xlarge" id="input01" />
+				<div class="control-group">
+					<label class="control-label" for="input01">主机IP:</label>
+					<div class="controls">
+						<input type="text" name="txt_ip" value="{{list.ip}}" class="input-xlarge" id="input01" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="input01">CPU:</label>
+					<div class="controls">
+						<input type="text" name="txt_cpu" value="{{list.cpu}}" class="input-xlarge" id="input01"/>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="input01">内存:</label>
+					<div class="controls">
+						<input type="text" name="txt_nc" value="{{list.memory}}" class="input-xlarge" id="input01"/>
+					</div>
+				</div>
+
+
+				<div class="control-group">
+					<label class="control-label" for="input01">硬盘:</label>
+					<div class="controls">
+						<input type="text" name="txt_yp" value="{{list.hard_disk}}" class="input-xlarge" id="input01"/>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="optionsCheckbox">状态:</label>
+					<div class="controls">
+						<input type="radio" name="ra_rob" id="optionsCheckbox" value="1" {% if list.state == 1 %} checked {% endif %} />在运行
+						<input type="radio" name="ra_rob" id="optionsCheckbox" value="2" {% if list.state == 2 %} checked {% endif %} />报废
+						<input type="radio" name="ra_rob" id="optionsCheckbox" value="3" {% if list.state == 3 %} checked {% endif %} />暂停
+					</div>
+				</div>
+
+				<div style="margin-left: 180px;">					
+					<button id="mybtu" type="submit" class="btn btn-primary" style="width: 100px;">保存</button>
+					<button type="reset" class="btn" style="margin-left: 5px;">重置</button>
+				</div>	
+			</fieldset>
+		</form>				
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'myadmin/base.html' %} <!--申明引用了模板-->
+
+
+{% block mainbody %} <!--申明占位后开始编写内容-->
+<h2>
+	会员信息浏览
+</h2>
+
+<form class="form-inline" action="{% url 'myadmin_users_index' 1 %}" method="get">
+	<label>关键字：</label>
+	<input type="text" name="keyword" value="{{request.GET.keyword}}" class="input-small" placeholder="账号">
+
+	<label> &nbsp; 状态：</label>
+	<select name="state" class="span1" style="width:150px;" >
+		<option value="">全部</option>
+		<option value="1">启用</option>
+		<option value="2">禁用</option>
+		<option value="0">后台管理员</option>
+	</select>
+		
+	<button type="submit" class="btn">搜索</button>
+	<a href="{% url 'myadmin_users_index' 1 %}" class="btn">全部</a> <!--一个跳转回商品浏览页的路由-->
+</form>
+
+
+<table class='table table-bordered table-striped'>
+	<thead>
+		<tr>
+			<th>ID号</th>
+			<th>账号</th>
+			<th>姓名</th>
+			<th>性别</th>
+			<th>邮箱</th>
+			<th>注册时间</th>
+			<th>状态</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for vo in userslist %}
+		<tr>
+			<td>{{ vo.id }}</td>
+			<td>{{ vo.username }}</td>
+			<td>{{ vo.name }}</td>
+			<td>{% if vo.sex == 1 %}男{% else %}女{% endif %}</td>
+			<td>{{ vo.email }}</td>
+			<td>{{ vo.addtime }}</td>
+			<td>{% if vo.state == 1 %}启用{% elif vo.state == 2 %}禁用{% else %}后台管理员{% endif %}</td>
+			<td>
+				<a href="{% url 'myadmin_users_edit' vo.id %}" class="view-link">编辑</a>
+				<a href="javascript:doDel('{% url 'myadmin_users_del' vo.id %}')" class="view-link">删除</a>
+				<a href="{% url 'myadmin_users_reset' vo.id %}" class="view-link">重置密码</a>
+				
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+				
+<div class="pagination">
+    <ul>
+        <li>
+            <a href="{% url 'myadmin_users_index' pIndex|add:-1 %}?{{ mywhere|join:'&' }}">&laquo;</a>
+        </li>
+        {% for p in plist %}
+        <li {% if pIndex == p %}class="active"{% endif %}>
+            <a href="{% url 'myadmin_users_index' p %}?{{ mywhere|join:'&' }}">{{p}}</a>
+        </li>
+        {% endfor %}
+        <li>
+            <a href="{% url 'myadmin_users_index' pIndex|add:1 %}?{{ mywhere|join:'&' }}">&raquo;</a>
+        </li>
+
+    </ul>
+</div>
+
+
+{% endblock %}

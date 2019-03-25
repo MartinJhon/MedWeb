@@ -1,0 +1,476 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>EG商城</title>
+	<link rel="icon" href="{% static 'mymanage/img/tb1.ICO' %}">
+	<link rel="stylesheet" href="{% static 'myweb/css/ft-carousel.css' %}" />
+	<script src="{% static 'mymanage/js/jquery.min.js' %}"></script>
+	<style type="text/css">
+		body,div,ul,li,img,a,span,p,h1,h2,h3,h4,h5,h6{margin: 0px;padding: 0px;}
+		ul{list-style: none;}
+		div{display: block;}
+		.top{
+			position: relative;
+			height: 40px;
+			font-size: 12px;
+			color: #b0b0b0;
+			background: #333;
+			width: 100%;
+		}
+		.container{
+			width: 1226px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.top_left{
+			float: left;
+			line-height: 40px;
+			height: 40px;
+		}
+		.top a{
+			color: #b0b0b0;
+			text-decoration: none;
+		}
+		.top a,span{
+			display: inline-block;
+		}
+		.top_right{
+			position: relative;
+			float: right;
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			color: #b0b0b0;
+			background: #424242;
+			width: 150px;
+			display: inline-block;
+		}
+		.top_herd{
+			position: relative;
+			height: 100px;
+		}
+		.logo {
+		    float: left;
+		    display: block;
+		    margin-top:0px;
+		}
+		.type ul li{
+			display: inline-block;
+			color: #333333;
+			font-family: 黑体;
+		}
+		.type ul {
+		    position: relative;
+		    width: 650px;
+		    height: 88px;
+		    margin-top: 20px;
+		    padding: 12px 0 0 30px;
+		    font-size:18px;
+		}
+		.mytxt {
+			position: absolute;
+			top: 20;
+			right: 51px;
+			width: 223px;
+			height: 48px;
+			padding: 0 10px;
+			border: 1px solid #e0e0e0;
+			font-size: 14px;
+			line-height: 48px;
+			outline: 0;
+		}
+		.mybtn {
+			position: absolute;
+			right: 0;
+			top: 20;
+			width: 52px;
+			height: 50px;
+			border: 1px solid #e0e0e0;
+			font-size: 24px;
+			line-height: 24px;
+			background: #fff;
+			color: #616161;
+			outline: 0;
+			background: url('{% static 'myweb/img/find1.png' %}') repeat 1px 1px;
+		}
+		.myul a{
+			text-decoration: none;
+			color: #757575;
+		}
+		.foot_ul li a{
+			text-decoration: none;
+			color: #616161;			
+		}
+		.foot_ul li a:hover{
+			color: #FF6700;
+		}
+		a:hover{
+			color: #FF6700;
+		}
+		.type ul li a{
+			text-decoration: none;
+			color: #333333;
+		}
+		.type ul li a:hover{
+			text-decoration: none;
+			color: #FF6700;
+		}
+		.left_list ul li:hover{
+			background-color: #FF6700;
+		}
+		{% block css %}
+
+		{% endblock %}
+	</style>
+
+
+	<script type="text/javascript">
+		function doenv(url){
+			if(confirm("要退出登录嘛?")){
+				window.location=url;
+			}
+		}
+		
+		var now=0;
+		function clock()
+		{
+			var cname
+			var total=$(".mylist ul").children().length;
+
+			if(now==total -1){
+				now=0; 
+			}
+			else{
+				now=now+1; 
+			 }
+			for(i=0;i<total;i++){
+				cname=".pic" + i;
+				$(cname).css("display","none");
+				$(".mylist ul li").eq(i).css("color","#B0B0B0");
+			}
+			cname=".pic" + now;
+			$(cname).eq(now).fadeIn(400);
+			$(".mylist ul li").eq(now).css("color","#FFFFFF");
+			$(cname).css("display","block");
+		}
+		$(function(){
+			/*制作图片切换*/
+			
+			$(".main_pic div,.mylist ul li").mouseenter(function(){
+				window.clearInterval(int);
+			});
+			$(".mylist ul li").mouseenter(function(){
+				if($(this).index()!=now){
+					now=$(this).index()-1;
+					clock();
+				}
+			});
+			var int=self.setInterval("clock()",3000)
+			$(".main_pic div,.mylist ul li").mouseleave(function(){
+				int=self.setInterval("clock()",3000)
+			});
+			/*制作结束*/
+			$(".mytxt").focus(function(){
+				$(".mytxt").css("border","1px solid #FF6700");
+				$(".mybtn").css("border","1px solid #FF6700");			
+			});
+
+			$(".mytxt").blur(function(){
+				$(".mytxt").css("border","1px solid #e0e0e0");
+				$(".mybtn").css("border","1px solid #e0e0e0");
+			});
+
+			$(".mybtn").mouseover(function(){
+			  $(".mybtn").css("background","url('{% static 'myweb/img/find2.png' %}') repeat 0px -1px");
+			});
+
+			$(".mybtn").mouseout(function(){
+			  $(".mybtn").css("background","url('{% static 'myweb/img/find1.png' %}') repeat 1px 1px");
+			});
+			/*右侧栏鼠标移动事件*/
+			$(".myul li").mouseover(function(){
+				var inde=$(this).index();
+				if(inde=='0')
+				{
+					$(".one").attr("src","{% static 'myweb/img/ren2.png' %}");
+				}
+				else if(inde=='2')
+				{
+					$(".two").attr("src","{% static 'myweb/img/server2.png' %}");
+				}
+				else if(inde=='4')
+				{
+					$(".three").attr("src","{% static 'myweb/img/car4.png' %}");
+				}
+			});
+
+			$(".myul li").mouseout(function(){
+				$(".one").attr("src","{% static 'myweb/img/ren1.png' %}");
+				$(".two").attr("src","{% static 'myweb/img/server1.png' %}");
+				$(".three").attr("src","{% static 'myweb/img/car3.png' %}");
+			});
+			/**/
+		});
+			{% block js %}
+			{% endblock %}
+	</script>
+
+</head>
+<body>
+	<div class="top">
+		<!--头部信息栏开始-->
+		<div class="container">
+			<div class="top_left">
+				<a href="{% url 'index' %}">EG商城</a>
+				<span style="margin-left: 6px;">|</span>
+				{% if request.session.vipuser %}
+				<span style="margin-left: 6px;">欢迎VIP会员:</span>
+				<a href="#" style="margin-left: 6px;">{{request.session.vipuser.username}}</a>
+				<span style="margin-left: 6px;">|</span>
+				<a href="{% url 'myweb_editvip' request.session.vipuser.id %}" style="margin-left: 6px;">进入会员中心</a>
+				<span style="margin-left: 6px;">|</span>
+				<a href="{% url 'myweb_exitweb' %}" style="margin-left: 6px;">退出</a>
+				{% else %}
+				<a href="{% url 'myweb_register' %}" style="margin-left: 6px;">登录</a>
+				<span style="margin-left: 6px;">|</span>
+				<a href="{% url 'myweb_reguser' %}" style="margin-left: 6px;">注册</a>
+				{% endif %}
+				
+			</div>
+			<div class="top_right">
+				<a href="{% url 'myweb_car_index' %}">
+					<i><img src="{% static 'myweb/img/car1.png' %}" style="display: inline-block;position: relative;top: 5px;"></i>
+					购物车
+					<span>({% if request.session.shoplist|length %}{{request.session.shoplist|length}}{% else %}0{% endif %})</span>
+				</a>
+			</div>
+		</div>
+		<div style="clear: both;width: 100%"></div>
+		<!--头部信息栏结束-->
+		<!--头部信息快捷开始-->
+		<div class="top_herd">
+			<div class="container" style="position: relative;">
+				<div class="logo">
+					<a href="{% url 'index' %}">
+						<img src="{% static 'myweb/img/login.jpg' %}">
+					</a>
+				</div>
+				<div class="type" style="float: left;width: 700px;display: inline-block;">
+					<ul>
+						<li style="margin-top: 10px;margin-left: 5px;"><a href="{% url 'index' %}">全部</a></li>
+						{% block types %}
+						{% for i in utype %}
+							<li style="margin-top: 10px;margin-left: 5px;"><a href="{% url 'myweb_Type_list' 1 %}?tid={{i.id}}">{{i.name}}</a></li>
+						{% endfor %}
+						{% endblock %}
+					</ul>
+				</div>
+				<div class="find" style="float: right;width: 296px;margin-top: 25px;">
+					<form action="{% url 'index' %}" method="get" style="display: block;width: 296px;height: 50px;">
+						{% csrf_token %}
+						<input class="mytxt" type="text" name="txt_name" placeholder="产品名称" value="{{request.GET.txt_name}}"  >
+						<input class="mybtn" type="submit" name="bnt" value="">
+					</form>
+				</div>
+			</div>
+			<div style="display: none;">
+
+			</div>
+		</div>
+		<!--头部信息快捷结束-->
+		{% block contains %}
+
+		<!--头部信息轮播图广告开始-->
+		<div class="container" style="position: relative;">
+			<div class="main_pic">
+				<div class="pic0" style="position: relative;top: -30px;margin-bottom: 26px;">
+					<a href="#"><img src="{% static 'myweb/img/gb1.jpg' %}" width="1226px;"></a>
+				</div>
+				<div class="pic1" style="position: relative;top: -30px;margin-bottom: 26px;display:none;">
+					<a href="#"><img src="{% static 'myweb/img/gb2.jpg' %}" width="1226px;"></a>
+				</div>
+				<div class="pic2" style="position: relative;top: -30px;margin-bottom: 26px;display:none;">
+					<a href="#"><img src="{% static 'myweb/img/gb3.jpg' %}" width="1226px;"></a>
+				</div>
+				<div class="pic3" style="position: relative;top: -30px;margin-bottom: 26px;display:none;">
+					<a href="#"><img src="{% static 'myweb/img/gb4.jpg' %}" width="1226px;"></a>
+				</div>
+				<div class="pic4" style="position: relative;top: -30px;margin-bottom: 26px;display:none;">
+					<a href="#"><img src="{% static 'myweb/img/gb5.jpg' %}" width="1226px;"></a>
+				</div>
+			</div>
+			<div class="left_list" style="position: relative;top: -518px;width: 234px;height: 460px;background-color: rgba(102,102,102,0.8);display: block;">
+				<ul style="height: 420px;color:#FDFBFB;border:0;position: relative;top:20px;">
+					<li style="display: list-item;text-align: left;">
+						<a href="#" style="margin-top: 10px;color:#FFFFFF;display: block;height: 42px;line-height: 42px;padding-left: 30px; font-size: 15px;">家用电器
+						</a>
+					</li>
+					<li style="display: list-item;text-align: left;">
+						<a href="#" style="margin-top: 10px;color:#FFFFFF;display: block;height: 42px;line-height: 42px;padding-left: 30px; font-size: 15px;">手机及周边配件
+						</a>
+					</li>
+
+					<li style="display: list-item;text-align: left;">
+						<a href="#" style="margin-top: 10px;color:#FFFFFF;display: block;height: 42px;line-height: 42px;padding-left: 30px; font-size: 15px;">电脑/办公用品
+						</a>
+					</li>
+
+					<li style="display: list-item;text-align: left;">
+						<a href="#" style="margin-top: 10px;color:#FFFFFF;display: block;height: 42px;line-height: 42px;padding-left: 30px; font-size: 15px;">男装/女装/童装
+						</a>
+					</li>
+
+					<li style="display: list-item;text-align: left;">
+						<a href="#" style="margin-top: 10px;color:#FFFFFF;display: block;height: 42px;line-height: 42px;padding-left: 30px; font-size: 15px;">母婴/玩具/乐器
+						</a>
+					</li>
+					<li style="display: list-item;text-align: left;">
+						<a href="#" style="margin-top: 10px;color:#FFFFFF;display: block;height: 42px;line-height: 42px;padding-left: 30px; font-size: 15px;">食品/酒水/生鲜
+						</a>
+					</li>
+					<li style="display: list-item;text-align: left;">
+						<a href="#" style="margin-top: 10px;color:#FFFFFF;display: block;height: 42px;line-height: 42px;padding-left: 30px; font-size: 15px;">图书/音响
+						</a>
+					</li>
+					<li style="display: list-item;text-align: left;">
+						<a href="#" style="margin-top: 10px;color:#FFFFFF;display: block;height: 42px;line-height: 42px;padding-left: 30px; font-size: 15px;">医疗/保健品
+							<!--<i style="position: absolute;top: 0px;right: 20px;font-size: 20px;font-variant: 黑体;">></i>-->
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="mylist" style="position: relative;left: 1100px;top: -550px;display:inline-block;">
+				<ul>
+					<li style="display:inline-block;">●</li>
+					<li style="display:inline-block;">●</li>
+					<li style="display:inline-block;">●</li>
+					<li style="display:inline-block;">●</li>
+					<li style="display:inline-block;">●</li>
+				</ul>
+			</div>
+		</div>
+		<!--头部信息轮播图广告结束-->
+		<!--商品浏览页-->
+		<div class="container" style="position: relative;top:-520px;">
+			<div style="height: 58px;">
+				<span style="color: #6C3333;font-size: 26px;">商品列表信息</span>
+				<hr>
+			</div>
+			<div style="width: 1226px;position: relative;top: -18px;padding-bottom: 40px;overflow: hidden;">
+				<ul>
+					{% for i in goodslist %}
+						<li style="display: inline-block;margin-top:10px;">
+							<div style="border: 1px solid #666;width: 238px;display: inline-block;">
+								<div>
+									<a href="{% url 'myweb_list' i.id %}"><img src="{% static 'mymanage/goods/m_' %}{{i.picname}}" style="padding: 5px;width: 228px;height: 228px;"></a>
+								</div>
+								<div>
+									<div style="margin-top: 10px;">
+										<span style="display: block;color: red;font-size: 20px;font-weight: bold;">￥{{i.price}}</span>
+									</div>
+									<div style="margin-top: 10px;">
+										<span style="display: inline-block;margin-left: 5px;">库存:{{i.store}}</span><span style="display: inline-block;margin-left:100px;">出售:{{i.num}}</span>
+									</div>
+									<h2 style="margin-top: 10px;margin-left: 4px;line-height: 30px;">{{i.goods}}</h2>
+									<h4 style="margin-top: 10px; padding-bottom: 10px;margin-left: 5px;line-height: 20px;">{{i.company}}</h4>
+								</div>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div style="position: relative;top: -20px;">
+				<ul>
+					{% if pIndex|add:-1 > 0 %}
+						<li style="display: inline-block;width: 30px;text-align: center;">
+							<a href="{% url 'myweb_index_list' pIndex|add:-1 %}?{{ mywhere|join:'&' }}" style=" font: bold 20px 黑体;">&laquo;</a>
+						</li>
+					{% endif %}
+					<!--增加分页栏-->
+					{% for j in plist %}
+						{% if j == pIndex %}
+							<li style="display: inline-block;border: 1px solid red;width: 30px;text-align: center;">
+								<span style="font: bold 20px 黑体;">{{j}}</span>
+							</li>
+						{% else %}
+							<li style="display: inline-block;border: 1px solid #666;width: 30px;text-align: center;">
+								<a href="{% url 'myweb_index_list' j %}?{{ mywhere|join:'&' }}" style="font: bold 20px 黑体;">{{j}}</a>
+							</li>
+						{% endif %}
+					{% endfor %}
+					<li style="display: inline-block;width: 30px;text-align: center;">
+						{% if pIndex|add:1 <= plist_len %}
+							<a href="{% url 'myweb_index_list' pIndex|add:1 %}?{{ mywhere|join:'&' }}" style=" font: bold 20px 黑体;">&raquo;</a>
+						{% endif %}
+					</li>
+				</ul>
+			</div>
+			<hr>
+			<div style="clear: both;width: 100%;"></div>
+			<div style="position: relative;top: 10px;">
+				<div style="font-size: 20px;text-align: center;">
+					<ul class="foot_ul">
+						<li style="display: inline-block;margin-left: 15px;"><a href="#" >虎牙商城</a><span style="display: inline-block;margin-left: 20px;">|</span></li>
+						<li style="display: inline-block;margin-left: 15px;"><a href="#" >嘉里商城</a><span style="display: inline-block;margin-left: 20px;">|</span></li>
+						<li style="display: inline-block;margin-left: 15px;"><a href="#" >计生商城</a><span style="display: inline-block;margin-left: 20px;">|</span></li>
+						<li style="display: inline-block;margin-left: 15px;"><a href="#" >婚姻商城</a><span style="display: inline-block;margin-left: 20px;">|</span></li>
+						<li style="display: inline-block;margin-left: 15px;"><a href="#" >恋爱商城</a><span style="display: inline-block;margin-left: 20px;">|</span></li>
+						<li style="display: inline-block;margin-left: 15px;"><a href="#" >亲子商城</a><span style="display: inline-block;margin-left: 20px;">|</span></li>
+						<li style="display: inline-block;margin-left: 15px;"><a href="#" >三代商城</a></li>
+					</ul>
+				</div>
+				<div style="font-size: 20px;text-align: center; margin-top: 10px;">
+					<p style="color: #999999;font-size: 13px;">版权:EG商城信息有限公司-粤备案号(68888688)</p>
+				</div>
+			</div>
+		</div>
+		<!--商品浏览结束#F5F5F5-->
+		{% endblock %}
+	</div>
+	<div style="position: fixed;bottom: 300px;right: 0;border: 1px solid #D8E9D4;height: 270px;width: 100px;">
+		<div style="margin-top: 20px;">
+			<ul class="myul">
+				<li style="text-align: center;">
+					{% if request.session.vipuser.id %}
+						<a href="{% url 'myweb_editvip' request.session.vipuser.id %}">
+							<div>
+								<img class="one" src="{% static 'myweb/img/ren1.png' %}" width="30px;">
+							</div>
+							<p style="display: block;font: bold 15px 黑体;margin-top: 6px;">个人中心</p>
+						</a>
+					{% else %}
+						<a href="">
+							<div>
+								<img class="one" src="{% static 'myweb/img/ren1.png' %}" width="30px;">
+							</div>
+							<p style="display: block;font: bold 15px 黑体;margin-top: 6px;">个人中心</p>
+						</a>
+					{% endif %}
+				</li>
+				<hr style="border: 1px solid #D8E9D4;">
+				<li style="text-align: center;margin-top: 20px;">
+					<a href="#">
+						<div>
+							<img class="two" src="{% static 'myweb/img/server1.png' %}" width="30px;">
+						</div>
+						<p style="display: block;font: bold 15px 黑体;margin-top: 6px;">联系客服</p>
+					</a>
+				</li>
+				<hr style="border: 1px solid #D8E9D4;">
+				<li style="text-align: center;margin-top: 20px;">
+					<a href="{% url 'myweb_car_index' %}">
+						<div>
+							<img class="three" src="{% static 'myweb/img/car3.png' %}" width="30px;">
+						</div>
+						<p style="display: block;font: bold 15px 黑体;margin-top: 6px;">购物详情</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>

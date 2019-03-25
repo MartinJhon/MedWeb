@@ -1,0 +1,112 @@
+{% extends "mymanage/main.html" %}
+{% load static from staticfiles %}
+{% block main_js_css %}
+<script src="{% static 'mymanage/js/jquery.min.js' %}"></script>
+<script type="text/javascript">
+	$(function(){
+		$("input[type='file']").change(function(){
+			//alert(file.split('\\').pop());
+			//选择后预览照片
+			//alert(URL.createObjectURL($(this)[0].files[0]));
+			$(".myimg").attr("src",URL.createObjectURL($(this)[0].files[0]));
+		});
+
+	});
+</script>
+{% endblock %}
+{% block Main_body %}
+<div class="row">
+	<div class="span9">
+		<h1>
+			编辑会员信息
+		</h1>
+		<form id="edit-profile" class="form-horizontal" method="post" action="{% url 'mymanage_user_update' %}" enctype="multipart/form-data">
+			{% csrf_token %}
+			<fieldset>
+				<legend>当前编辑窗口</legend>
+				<input type="hidden" name="txt_id" class="input-xlarge" id="input01" value="{{list.id}}" />
+				<input type="hidden" name="txt_user_hidden" class="input-xlarge" id="input01" value="{{list.username}}" />
+				<div class="control-group">
+					<label class="control-label" for="input01">账号:</label>
+					<div class="controls">
+						<input type="text" name="txt_user" class="input-xlarge" id="input01" disabled="true" value="{{list.username}}"/>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="input01" >真实姓名:</label>
+					<div class="controls">
+						<input type="text" name="txt_name" class="input-xlarge" id="input01" value="{{list.name}}" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="optionsCheckbox">性别:</label>
+					<div class="controls">
+						<input type="radio" name="ra_sex" id="optionsCheckbox" value="1" {% if list.sex == 1 %}checked{% endif %} />男
+						<input type="radio" name="ra_sex" id="optionsCheckbox" value="0" {% if list.sex == 0 %}checked{% endif %}/>女
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="optionsCheckbox">角色:</label>
+					<div class="controls">
+						<input type="radio" name="ra_rob" id="optionsCheckbox" value="0" {% if list.state == 0 %}checked{% endif %} />管理员
+						<input type="radio" name="ra_rob" id="optionsCheckbox" value="1" {% if list.state == 1 %}checked{% endif %} />普通会员
+						<input type="radio" name="ra_rob" id="optionsCheckbox" value="2" {% if list.state == 2 %}checked{% endif %}/>禁用用户
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="input01">地址:</label>
+					<div class="controls">
+						<input type="text" name="txt_addr" class="input-xlarge" id="input01" value="{{list.address}}"/>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="input01">邮编:</label>
+					<div class="controls">
+						<input type="text" name="txt_map" class="input-xlarge" id="input01" value="{{list.code}}"/>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="input01">电话:</label>
+					<div class="controls">
+						<input type="text" name="txt_phone" class="input-xlarge" id="input01" value="{{list.phone}}"/>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="input01">Email邮箱:</label>
+					<div class="controls">
+						<input type="text" name="txt_mail" class="input-xlarge" id="input01" value="{{list.email}}"/>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="fileInput">Photo</label>
+					<div class="controls">
+						<input class="input-file" name="txt_photo" id="fileInput" type="file" />
+					</div>
+				</div>
+				<div style="margin-left: 180px;">					
+					<button id="mybtu" type="submit" class="btn btn-primary" style="width: 100px;">保存</button>
+					<button type="reset" class="btn" style="margin-left: 5px;">重置</button>
+				</div>	
+				<div style="width: 280px;position: relative;top:-480px;left: 500px;">
+					<div style="width: 260px;border: 1px solid #666;">
+						{% if uphoto == '' %}
+							<img class="myimg" name="myphoto" src="{% static 'mymanage/img/tmp1.jpg' %}" width="250px" style="margin: 5px;" />
+						{% else %}
+							<img class="myimg" name="myphoto" src="{% static 'mymanage/tempimg/' %}{{uphoto}}" width="250px" style="margin: 5px;" />
+						{% endif %}
+					</div>
+					<div style="text-align: center;margin-top: 10px;font: bold 10px 黑体;">
+						<span>会员头像(jpg/png/gif)</span>
+					</div>
+				</div>
+			</fieldset>
+		</form>				
+	</div>
+</div>
+{% endblock %}

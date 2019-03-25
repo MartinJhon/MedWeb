@@ -1,0 +1,33 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]--><!--[if IE 7 ]><html lang="en" class="ie7 ielt8 ielt9"><![endif]--><!--[if IE 8 ]><html lang="en" class="ie8 ielt9"><![endif]--><!--[if IE 9 ]><html lang="en" class="ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--> 
+<html lang="en"><!--<![endif]--> 
+	<head>
+		<meta charset="utf-8">
+		<title>欢迎登录EG后台管理系统</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="{% static 'mymanage/css/bootstrap.min.css' %}" rel="stylesheet">
+		<link href="{% static 'mymanage/css/bootstrap-responsive.min.css' %}" rel="stylesheet">
+		<link href="{% static 'mymanage/css/site.css' %}" rel="stylesheet">
+		<link href="{% static 'mymanage/css/mycss.css' %}"  rel="stylesheet">
+		<link rel="icon" href="{% static 'mymanage/img/tb1.ICO' %}">
+		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	</head>
+	<body>
+		<div id="login-page" class="container" style="width: 50%;">
+			<h1>欢迎登录EG后台管理系统</h1>
+			<form id="login-form" class="well" action="{% url 'mymanage_dologin' %}" method="post">
+				{% csrf_token %}
+				<input name="txtname" type="text" class="span2" placeholder="用户名"  /><br />
+				<input name="txtpwd" type="password" class="span2" placeholder="密码" /><br />
+				<label class="checkbox"> <input type="checkbox" /> 记住我的用户名和密码 </label>
+				<button type="submit" class="btn btn-primary">登录</button>
+				<button type="reset" class="btn">重置</button>
+			</form>	<br>
+			<span>{{info}}</span>
+		</div>
+		<script src="{% static 'mymanage/js/jquery.min.js' %}"></script>
+		<script src="{% static 'mymanage/js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'mymanage/js/site.js' %}"></script>
+	</body>
+</html>
